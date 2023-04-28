@@ -115,7 +115,5 @@ class Listener:
                 data = self.queue.get()
                 if self.recognizer.AcceptWaveform(data):
                     result = json.loads(self.recognizer.Result())
-                    if "spk" in result.keys():
-                        print(self.identify_speaker(result["spk"]))
                     self.recognizer.Reset()
                     callback(result)
