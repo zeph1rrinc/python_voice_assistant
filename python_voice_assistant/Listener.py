@@ -1,7 +1,6 @@
 import json
 import math
 import queue
-from os.path import join
 from typing import Callable
 
 import numpy as np
@@ -31,7 +30,7 @@ class Listener:
 
     def __init_recognizer(self):
         model = vosk.Model(settings.recognizing_model_path)
-        spk_model = vosk.SpkModel(join(settings.models_path, "speaker_model"))
+        spk_model = vosk.SpkModel(settings.speaker_model_path)
         recognizer = vosk.KaldiRecognizer(model, self.sample_rate)
         recognizer.SetSpkModel(spk_model)
         self.recognizer = recognizer

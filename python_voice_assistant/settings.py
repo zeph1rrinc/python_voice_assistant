@@ -3,7 +3,7 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     # LISTENER ENVS
-    models_path: str
+    speaker_model_path: str
     recognizing_model_path: str
 
     # SPEAKER ENVS
