@@ -2,6 +2,4 @@
 
 ## TODO
 
-- tests
 - docs
-- github actions

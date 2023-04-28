@@ -51,9 +51,11 @@ class Helper:
         if voice["text"].startswith(self.name):
             command = voice["text"].replace(self.name, "").strip()
             logger.debug(command)
-            if command.lower() in self.commands.keys():
-                self.commands[command](voice)
-                return
+            for cmd in self.commands.keys():
+                if command.lower().startswith(cmd):
+                    voice["text"] = command.replace(cmd, "").strip()
+                    self.commands[cmd](voice)
+                    return
             self.speaker.say(self.answers["uncought"])
 
     def listen(self):

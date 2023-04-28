@@ -18,14 +18,15 @@ def cosine_dist(x, y):
 
 
 class Listener:
-    def __init__(self) -> None:
+    def __init__(self, test_mode=False) -> None:
         self.sample_rate = 16000
         self.device = 1
         self.queue = queue.Queue()
         self.speakers = {}
 
-        self.__init_recognizer()
-        self.__get_speakers()
+        if not test_mode:
+            self.__init_recognizer()
+        self.get_speakers()
         logger.debug("Listener initialized")
 
     def __init_recognizer(self):
@@ -35,14 +36,14 @@ class Listener:
         recognizer.SetSpkModel(spk_model)
         self.recognizer = recognizer
 
-    def __get_speakers(self):
+    def get_speakers(self):
         try:
             with open("speakers.json", encoding="utf-8") as file:
                 self.speakers = json.load(file)
         except FileNotFoundError:
-            self.__dump_speakers()
+            pass
 
-    def __dump_speakers(self):
+    def dump_speakers(self):
         with open("speakers.json", "w", encoding="utf-8") as file:
             json.dump(self.speakers, file, indent=4, ensure_ascii=False)
 
@@ -70,7 +71,11 @@ class Listener:
         with open(speaker_model_path, encoding="utf-8") as file:
             data = json.load(file)
         self.speakers[data["speaker"]] = data["spk"]
-        self.__dump_speakers()
+        self.dump_speakers()
+
+    def add_speaker(self, data: dict):
+        self.speakers[data["speaker"]] = data["spk"]
+        self.dump_speakers()
 
     def create_speaker(self, name: str, stop_word: str):
         with sd.RawInputStream(
@@ -86,10 +91,11 @@ class Listener:
                 data = self.queue.get()
                 if self.recognizer.AcceptWaveform(data):
                     result = json.loads(self.recognizer.Result())
+                    logger.debug(result["text"])
                     if stop_word in result["text"]:
                         is_creating = False
                         self.speakers[name] = result["spk"]
-                        self.__dump_speakers()
+                        self.dump_speakers()
 
     def queue_callback(self, indata, frames, time, status):
         if status:
@@ -111,4 +117,5 @@ class Listener:
                     result = json.loads(self.recognizer.Result())
                     if "spk" in result.keys():
                         print(self.identify_speaker(result["spk"]))
+                    self.recognizer.Reset()
                     callback(result)
