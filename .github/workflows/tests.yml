@@ -23,9 +23,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install poetry
-          poetry add pydantic numpy
+          pip install pydantic numpy pytest
 
       - name: Run tests
         run: |
-          poetry run pytest -sv
+          pytest -v
