@@ -1,0 +1,5 @@
+{
+    "ready": "Voice assistant {name} is ready",
+    "uncought": "I don't understand you",
+    "already": "Command with this name already bind"
+}
