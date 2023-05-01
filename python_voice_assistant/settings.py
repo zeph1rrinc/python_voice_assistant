@@ -3,8 +3,8 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     # LISTENER ENVS
-    models_path: str
-    recognizing_model_path: str
+    speaker_model_path: str = "models/speaker_model"
+    recognizing_model_path: str = "models/recognizing_model"
 
     # SPEAKER ENVS
     language: str = "ru"
