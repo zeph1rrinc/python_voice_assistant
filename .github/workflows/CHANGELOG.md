@@ -1,0 +1,2 @@
+- Ready 1.0.0 version
+- Added speaker recognition
