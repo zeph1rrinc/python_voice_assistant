@@ -8,6 +8,8 @@ from .settings import settings
 
 
 class Speaker:
+    """Class for generating speech by text"""
+
     def __init__(self) -> None:
         self.model, _ = torch.hub.load(
             repo_or_dir=settings.repo_or_dir,
@@ -19,7 +21,12 @@ class Speaker:
         logger.debug("Speaker initialized")
 
     def say(self, text: str):
-        logger.debug(text)
+        """
+        Мethod for generating and playing sound
+
+        :param text: message for converting and playing
+        :type text: str
+        """
         audio = self.model.apply_tts(
             text=text,
             speaker=settings.speaker,
